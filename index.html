@@ -88,17 +88,17 @@ body{background:var(--cream);color:var(--text-main);font-family:"Inter",sans-ser
 .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--terracota);animation:pulse 2s infinite;}
 
 /* ── COUNTER ── */
-.counter-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;position:relative;z-index:1;margin-bottom:52px;}
-.counter-label{font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--text-muted);}
-.counter-num-wrap{display:flex;align-items:baseline;gap:6px;}
-.counter-num{font-family:"Cormorant Garamond",serif;font-size:52px;font-weight:300;color:var(--terracota);line-height:1;transition:all 0.4s;}
-.counter-suffix{font-family:"Cormorant Garamond",serif;font-size:28px;font-weight:300;color:var(--terracota-soft);}
-.counter-sub{font-size:12px;color:var(--text-muted);letter-spacing:0.08em;}
-.progress-bar-wrap{width:min(320px,80vw);margin-top:4px;}
-.progress-track{height:3px;background:var(--linen-mid);border-radius:100px;overflow:hidden;}
-.progress-fill{height:100%;background:linear-gradient(to right,var(--terracota-soft),var(--terracota));border-radius:100px;width:0%;transition:width 1.5s 0.5s cubic-bezier(0.4,0,0.2,1);}
-.progress-labels{display:flex;justify-content:space-between;margin-top:6px;}
-.progress-labels span{font-size:10px;color:var(--text-muted);letter-spacing:0.08em;}
+
+
+
+
+
+
+
+
+
+
+
 
 /* ── DIVIDER ── */
 .divider{width:100%;height:1px;background:linear-gradient(to right,transparent,var(--terracota-pale),transparent);}
@@ -199,7 +199,7 @@ footer{padding:52px 24px;text-align:center;background:var(--espresso);}
   .lang-bar{padding:14px 20px;}
   .corner{display:none;}
   .section{padding:70px 20px;}
-  .counter-num{font-size:40px;}
+  
 }
 </style>
 </head>
@@ -477,7 +477,7 @@ footer{padding:52px 24px;text-align:center;background:var(--espresso);}
 
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsU7JPKR9t4VvTjRQnCxK1KZc6NvEdWJidkk9QaNkRm73TMJdMQId6-LY7UZuVqsFJhg/exec";
-const FIRST_WAVE_TARGET = 150;
+
 const phrases = { es:"Mallorca como nunca la has sentido.", en:"Mallorca like you've never felt it." };
 let currentLang = "es";
 
@@ -498,61 +498,13 @@ function enterSite() {
     intro.style.display = "none";
     document.getElementById("main-content").classList.add("visible");
     document.body.style.overflow = "";
-    fetchCounter();
+    
   }, 950);
 }
 setTimeout(() => { if(document.getElementById("intro").style.display !== "none") enterSite(); }, 7500);
 
 // ── COUNTER ──
-let counterFetched = false;
-let sheetEmails = [];
 
-function fetchCounter() {
-  if(counterFetched) return;
-  counterFetched = true;
-  // JSONP — bypasses CORS completely
-  window._smCallback = function(data) {
-    animateCounter(typeof data.count === "number" ? data.count : 0);
-    sheetEmails = data.emails || [];
-    // cleanup
-    delete window._smCallback;
-    const s = document.getElementById("_sm_jsonp");
-    if(s) s.remove();
-  };
-  const script = document.createElement("script");
-  script.id = "_sm_jsonp";
-  script.src = SCRIPT_URL + "?callback=_smCallback";
-  script.onerror = () => { animateCounter(0); };
-  document.head.appendChild(script);
-}
-
-function animateCounter(target) {
-  const el = document.getElementById("counter-display");
-  const fill = document.getElementById("progress-fill");
-  const pct = Math.min((target / FIRST_WAVE_TARGET) * 100, 100);
-  if(target === 0) { el.textContent = 0; fill.style.width = "0%"; return; }
-  // Start from a number close to target so animation is subtle not jarring
-  const startFrom = Math.max(0, target - Math.min(target, 5));
-  let current = startFrom;
-  const duration = 600;
-  const steps = 30;
-  const increment = (target - startFrom) / steps;
-  const interval = duration / steps;
-  el.textContent = startFrom;
-  const t = setInterval(() => {
-    current = Math.min(current + increment, target);
-    el.textContent = Math.floor(current);
-    if(current >= target) { el.textContent = target; clearInterval(t); }
-  }, interval);
-  setTimeout(() => { fill.style.width = pct + "%"; }, 100);
-}
-
-// Trigger counter when it scrolls into view
-const counterObs = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if(e.isIntersecting && !counterFetched) { fetchCounter(); counterObs.unobserve(e.target); } });
-}, { threshold: 0.3 });
-const cSection = document.getElementById("counter-section");
-if(cSection) counterObs.observe(cSection);
 
 // ── LANGUAGE ──
 function setLang(lang) {
@@ -611,13 +563,6 @@ async function handleSubmit(e) {
     interes: document.getElementById("interes").value,
     canal: document.getElementById("canal").value
   };
-  // Check duplicate client-side
-  if(sheetEmails.includes(payload.email.toLowerCase())) {
-    btn.disabled = false;
-    btn.querySelector("span").textContent = currentLang==="es" ? "QUIERO ACCESO ANTICIPADO" : "I WANT EARLY ACCESS";
-    showFieldError("email", currentLang==="es" ? "Este email ya está en la lista 👋" : "This email is already on the list 👋");
-    return;
-  }
 
   try {
     await fetch(SCRIPT_URL, {
@@ -629,9 +574,6 @@ async function handleSubmit(e) {
     // no-cors always succeeds silently — show success
     document.getElementById("form-container").style.display = "none";
     document.getElementById("success-state").style.display = "block";
-    // Bump counter
-    const el = document.getElementById("counter-display");
-    if(el) { const v = parseInt(el.textContent)||0; el.textContent = v+1; }
 
   } catch(err) {
     btn.disabled = false;
