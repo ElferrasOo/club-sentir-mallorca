@@ -528,13 +528,20 @@ let sheetEmails = [];
 function fetchCounter() {
   if(counterFetched) return;
   counterFetched = true;
-  fetch(SCRIPT_URL + "?action=data")
-    .then(r => r.json())
-    .then(data => {
-      animateCounter(typeof data.count === "number" ? data.count : 0);
-      sheetEmails = data.emails || [];
-    })
-    .catch(() => animateCounter(0));
+  // JSONP — bypasses CORS completely
+  window._smCallback = function(data) {
+    animateCounter(typeof data.count === "number" ? data.count : 0);
+    sheetEmails = data.emails || [];
+    // cleanup
+    delete window._smCallback;
+    const s = document.getElementById("_sm_jsonp");
+    if(s) s.remove();
+  };
+  const script = document.createElement("script");
+  script.id = "_sm_jsonp";
+  script.src = SCRIPT_URL + "?callback=_smCallback";
+  script.onerror = () => { animateCounter(0); };
+  document.head.appendChild(script);
 }
 
 function animateCounter(target) {
