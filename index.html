@@ -541,12 +541,15 @@ function animateCounter(target) {
   const el = document.getElementById("counter-display");
   const fill = document.getElementById("progress-fill");
   const pct = Math.min((target / FIRST_WAVE_TARGET) * 100, 100);
-  let current = 0;
   if(target === 0) { el.textContent = 0; fill.style.width = "0%"; return; }
-  const duration = 1200;
-  const steps = 60;
-  const increment = target / steps;
+  // Start from a number close to target so animation is subtle not jarring
+  const startFrom = Math.max(0, target - Math.min(target, 5));
+  let current = startFrom;
+  const duration = 600;
+  const steps = 30;
+  const increment = (target - startFrom) / steps;
   const interval = duration / steps;
+  el.textContent = startFrom;
   const t = setInterval(() => {
     current = Math.min(current + increment, target);
     el.textContent = Math.floor(current);
