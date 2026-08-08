@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Bienvenido al Club! · Sentir Mallorca</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --terracota:        #C96A47;
+  --terracota-deep:   #A84E30;
+  --terracota-pale:   #F0C4B0;
+  --cream:            #FBF7F2;
+  --espresso:         #2C1A10;
+  --text-mid:         #6B5A4E;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--cream);
+  color:var(--espresso);
+  font-family:"Inter",sans-serif;
+  font-weight:300;
+  line-height:1.6;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+}
+.card{
+  max-width:440px;
+  width:100%;
+  background:white;
+  border:1.5px solid var(--terracota-pale);
+  border-radius:12px;
+  box-shadow:0 8px 40px rgba(201,106,71,0.1);
+  padding:52px 40px;
+  text-align:center;
+}
+.icon{font-size:36px;margin-bottom:20px;color:var(--terracota);}
+h1{
+  font-family:"Cormorant Garamond",serif;
+  font-size:34px;
+  font-weight:300;
+  margin-bottom:12px;
+  color:var(--espresso);
+}
+p{
+  font-size:15px;
+  color:var(--text-mid);
+  line-height:1.75;
+  margin-bottom:28px;
+}
+.whatsapp-btn{
+  display:block;
+  width:100%;
+  background:var(--terracota);
+  border:none;
+  border-radius:6px;
+  padding:17px 32px;
+  color:white;
+  font-family:"Inter",sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.22em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:all 0.3s;
+}
+.whatsapp-btn:hover{background:var(--terracota-deep);}
+.note{font-size:12px;color:var(--text-mid);margin-top:20px;margin-bottom:0;}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✦</div>
+    <h1>¡Bienvenido al Club!</h1>
+    <p>Tu suscripción ya está activa. Solo te queda un paso: entra en nuestro grupo privado de WhatsApp para recibir las novedades, descuentos y eventos exclusivos.</p>
+    <a href="https://chat.whatsapp.com/GBi3dlANx062L1NigIFsFX" class="whatsapp-btn" target="_blank" rel="noopener">Unirme al grupo privado</a>
+    <p class="note">Gracias por confiar en Sentir Mallorca.</p>
+  </div>
+</body>
+</html>
